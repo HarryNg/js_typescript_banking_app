@@ -3,6 +3,9 @@ export default class Transaction {
     #date = new Date();
 
     constructor(amount) {
+        if (typeof amount !== 'number') {
+            throw new Error('Transaction amount must be a number');
+        }
         this.#amount = amount;
     }
 

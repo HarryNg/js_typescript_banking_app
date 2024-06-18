@@ -5,6 +5,12 @@ export default class Customer {
     #transactions;
 
     constructor(name, id) {
+        if (!name || typeof name !== 'string') {
+            throw new Error('Customer name must be a non-empty string');
+        }
+        if (!Number.isInteger(id) || id <= 0) {
+            throw new Error('Customer ID must be a positive integer');
+        }
         this.#name = name;
         this.#id = id;
         this.#transactions = [];

@@ -2,11 +2,6 @@ import Bank from "./bank.js"
 import Branch from "./branch.js"
 import Customer from "./customer.js"
 
-
-
-
-
-
 const arizonaBank = new Bank("Arizona")
 const westBranch = new Branch("West Branch")
 const sunBranch = new Branch("Sun Branch")

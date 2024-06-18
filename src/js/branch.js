@@ -4,6 +4,9 @@ export default class Branch {
     #customers;
 
     constructor(branchName) {
+        if (!branchName || typeof branchName !== 'string') {
+            throw new Error('Branch name must be a non-empty string');
+        }
         this.#branchName = branchName;
         this.#customers = [];
     }
@@ -16,6 +19,9 @@ export default class Branch {
     }
 
     addCustomer(customer) {
+        if (!(customer instanceof Customer)) {
+            throw new Error('Invalid customer object');
+        }
         if(!this.#customers.find(c => c.getId() === customer.getId())){
             this.#customers.push(customer);
             return true;

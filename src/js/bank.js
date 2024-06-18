@@ -1,4 +1,6 @@
 import Branch from './branch.js';
+import Customer from './customer.js';
+
 export default class Bank {
     #name;
     #branches;
@@ -16,6 +18,9 @@ export default class Bank {
     }
 
     addBranch(branch) {
+        if (!(branch instanceof Branch)) {
+            throw new Error('Invalid branch object');
+        }
         if(!this.#branches.includes(branch)) {
             this.#branches.push(branch);
             console.log(`\n-- Successfully added "${branch.getName()}" to ${this.getName()} bank`)
@@ -25,6 +30,9 @@ export default class Bank {
         return false;
     }
     addCustomer(branch, customer) {
+        if (!(branch instanceof Branch) || !(customer instanceof Customer)) {
+            throw new Error('Invalid branch or customer object');
+        }
         const targetBranch = this.findBranchByName(branch.getName());
         if(targetBranch) {
             return targetBranch.addCustomer(customer);
@@ -32,6 +40,9 @@ export default class Bank {
         return false;
     }
     addCustomerTransaction(branch, customerId, amount) {
+        if (!(branch instanceof Branch) || !Number.isInteger(customerId) || typeof amount !== 'number') {
+            throw new Error('Invalid input');
+        }
         const targetedBranch = this.findBranchByName(branch.getName());
         if(targetedBranch) {
             return targetedBranch.addCustomerTransaction(customerId, amount);
@@ -39,6 +50,9 @@ export default class Bank {
         return false;
     }
     findBranchByName(branchName) {
+        if (!branchName || typeof branchName !== 'string') {
+            throw new Error('Branch name must be a non-empty string');
+        }
         const branch = this.#branches.find(branch => branch.getName() === branchName);
         if(branch) {
             return branch;
@@ -46,9 +60,15 @@ export default class Bank {
         return null;
     }
     checkBranch(branchName) {
+        if (!branchName || typeof branchName !== 'string') {
+            throw new Error('Branch name must be a non-empty string');
+        }
         return this.#branches.find(branch => branch.getName() === branchName) !== undefined;
     }
     listCustomers(branch,includeTransactions=false) {
+        if (!(branch instanceof Branch)) {
+            throw new Error('Invalid branch object');
+        }
         const targetBranch = this.findBranchByName(branch.getName());
         let message = "\n============================================================================\n";
         message += `-- Listing customers in ${branch.getName()}: `;
