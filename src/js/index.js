@@ -13,8 +13,12 @@ arizonaBank.addBranch(westBranch)
 arizonaBank.addBranch(sunBranch)
 arizonaBank.addBranch(westBranch)
 
+console.log("\n-- Branch West Branch exists: " + arizonaBank.checkBranch(sunBranch.getName()) );
+console.log("\n-- Branch Sun Branch exists: " +  arizonaBank.checkBranch(westBranch.getName()) );
+
 arizonaBank.findBranchByName("bank")
 arizonaBank.findBranchByName("sun")
+
 
 arizonaBank.addCustomer(westBranch, customer1)
 arizonaBank.addCustomer(westBranch, customer3)
@@ -36,7 +40,7 @@ const searchByName = arizonaBank.searchCustomersByCriteria({name: "John"});
 console.log("\n-- Search results for 'John':", searchByName.map(customer => `${customer.getName()} (ID: ${customer.getId()})`));
 
 const searchByNameID = arizonaBank.searchCustomersByCriteria({name: 'John', id: '3'});
-console.log("\n-- Search results for 'John':", searchByNameID.map(customer => `${customer.getName()} (ID: ${customer.getId()})`));
+console.log("\n-- Search results for 'John with id: 3':", searchByNameID.map(customer => `${customer.getName()} (ID: ${customer.getId()})`));
 
 const searchByID = arizonaBank.searchCustomersByCriteria({id: '2'});
-console.log("\n-- Search results for 'John':", searchByID.map(customer => `${customer.getName()} (ID: ${customer.getId()})`));
+console.log("\n-- Search results for 'id: 2':", searchByID.map(customer => `${customer.getName()} (ID: ${customer.getId()})`));

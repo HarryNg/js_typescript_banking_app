@@ -23,9 +23,6 @@ export default class Customer {
         return this.#id;
     }
     getTransactions() {
-        if(this.#transactions.length === 0) {
-            return null;
-        }
         return this.#transactions;
     }
     getBalance() {

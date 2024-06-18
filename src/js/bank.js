@@ -63,7 +63,7 @@ export default class Bank {
         if (!branchName || typeof branchName !== 'string') {
             throw new Error('Branch name must be a non-empty string');
         }
-        return this.#branches.find(branch => branch.getName() === branchName) !== undefined;
+        return this.#branches.some(branch => branch.getName() === branchName);
     }
     listCustomers(branch,includeTransactions=false) {
         if (!(branch instanceof Branch)) {
