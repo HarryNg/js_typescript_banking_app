@@ -96,4 +96,15 @@ export default class Bank {
         }
         return message;
     }
+    searchCustomersByCriteria(criteria) {
+        if (typeof criteria !== 'object' || criteria === null) {
+            throw new Error('Search criteria must be an object');
+        }
+        let results = [];
+        this.#branches.forEach(branch => {
+            results = results.concat(branch.searchCustomersByCriteria(criteria));
+        });
+        return results;
+    }
+
 }

@@ -29,3 +29,14 @@ customer1.addTransactions(-1000)
 console.log(`\n-- Current balance: ${customer1.getBalance()}`)
 console.log(arizonaBank.listCustomers(westBranch, true))
 console.log(arizonaBank.listCustomers(sunBranch,true))
+
+// Search for customers by name and/or ID
+
+const searchByName = arizonaBank.searchCustomersByCriteria({name: "John"});
+console.log("\n-- Search results for 'John':", searchByName.map(customer => `${customer.getName()} (ID: ${customer.getId()})`));
+
+const searchByNameID = arizonaBank.searchCustomersByCriteria({name: 'John', id: '3'});
+console.log("\n-- Search results for 'John':", searchByNameID.map(customer => `${customer.getName()} (ID: ${customer.getId()})`));
+
+const searchByID = arizonaBank.searchCustomersByCriteria({id: '2'});
+console.log("\n-- Search results for 'John':", searchByID.map(customer => `${customer.getName()} (ID: ${customer.getId()})`));

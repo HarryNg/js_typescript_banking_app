@@ -35,4 +35,7 @@ export default class Branch {
         }
         return false;
     }
+    searchCustomersByCriteria(criteria) {
+        return this.#customers.filter(customer => customer.matchesCriteria(criteria));
+    }
 }

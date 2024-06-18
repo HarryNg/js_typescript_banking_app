@@ -48,7 +48,23 @@ export default class Customer {
             return true;
         }
         return false;
-            
     }
-
+    matchesCriteria(criteria) {
+        for (let field in criteria) {
+            if (criteria.hasOwnProperty(field)) {
+                const value = criteria[field].toLowerCase();
+                switch (field) {
+                    case 'name':
+                        if (!this.#name.toLowerCase().includes(value)) return false;
+                        break;
+                    case 'id':
+                        if (!this.#id.toString().includes(value)) return false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return true;
+    }
 }
