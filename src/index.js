@@ -32,6 +32,9 @@ class Customer {
         return this.#id;
     }
     getTransactions() {
+        if(this.#transactions.length === 0) {
+            return null;
+        }
         return this.#transactions;
     }
     getBalance() {
@@ -45,8 +48,8 @@ class Customer {
         if(typeof amount !== 'number') {
             throw new Error('amount must be a number');
         }
-        if(amount === 0) {
-            throw new Error('amount must be greater than 0');
+        if(this.getBalance() + amount < 0){
+            throw new Error('Insufficient funds');
         }
         if(this.getBalance() + amount > 0) {
             const newTransaction = new Transaction(amount);
@@ -110,47 +113,63 @@ class Bank {
     addBranch(branch) {
         if(!this.#branches.includes(branch)) {
             this.#branches.push(branch);
+            console.log(`\n-- Successfully added "${branch.getName()}" to ${this.getName()} bank`)
             return true;
         }
+        console.log(`\n-- Unable to add "${branch.getName()}", Branch already exists`)
         return false;
     }
-    addCustomer(branchName, customer) {
-        const branch = this.#branches.find(branch => branch.getName() === branchName.getName());
-        if(branch) {
-            return branch.addCustomer(customer);
+    addCustomer(branch, customer) {
+        const targetBranch = this.findBranchByName(branch.getName());
+        if(targetBranch) {
+            return targetBranch.addCustomer(customer);
         }
         return false;
     }
-    addCustomerTransaction(branchName, customerId, amount) {
-        const targetedBranch = this.#branches.find(branch => branch.getName() === branchName.getName());
+    addCustomerTransaction(branch, customerId, amount) {
+        const targetedBranch = this.findBranchByName(branch.getName());
         if(targetedBranch) {
             return targetedBranch.addCustomerTransaction(customerId, amount);
         }
         return false;
     }
     findBranchByName(branchName) {
-        return this.#branches.find(branch => branch.getName() === branchName) || null;
+        const branch = this.#branches.find(branch => branch.getName() === branchName);
+        if(branch) {
+            return branch;
+        }
+        return null;
     }
     checkBranch(branchName) {
         return this.#branches.find(branch => branch.getName() === branchName) !== undefined;
     }
-    listCustomers(branchName,includeTransactions=false) {
-        const branch = this.findBranchByName(branchName.getName());
-        const customers = branch.getCustomers();
-        if(branch) {
-            branch.getCustomers().forEach(customer => {
-                console.log(`\n Customer: ${customer.getName()} (ID: ${customer.getId()})`);
+    listCustomers(branch,includeTransactions=false) {
+        const targetBranch = this.findBranchByName(branch.getName());
+        let message = "\n============================================================================\n";
+        message += `-- Listing customers in ${branch.getName()}: `;
+        if(targetBranch) {
+            const customers = targetBranch.getCustomers();
+            if(customers.length === 0) {
+                message += `\n  -- No customers found in ${branch.getName()} branch`;
+            }
+            customers.forEach(customer => {
+                message += `\n   Customer: ${customer.getName()} (ID: ${customer.getId()})`;
                 if (includeTransactions) {
-                  console.log('Transactions:');
-                  customer.getTransactions().forEach(transaction => {
-                    console.log(`  - Amount: ${transaction.getAmount()}, Date: ${transaction.getDate()}`);
-                  });
+                  message+= '\n     Transactions:';
+                  const transactions = customer.getTransactions();
+                  if (transactions === null) {
+                    message+= `\n     No transactions found for customer ${customer.getName()} in branch ${branch.getName()}\n`;
+                  }else {
+                    transactions.forEach(transaction => {
+                        message+= `\n     - Amount: ${transaction.getAmount()}, Date: ${transaction.getDate()} \n`;
+                      });
+                  }
                 }
               });
-            
-            return customers;
+        }else {
+            message+= `\n-- Unable to list customers \n`;
         }
-        return [];
+        return message;
     }
 }
 
@@ -178,6 +197,6 @@ arizonaBank.addCustomerTransaction(westBranch, customer1.getId(), 2000)
 arizonaBank.addCustomerTransaction(westBranch, customer2.getId(), 3000)
 
 customer1.addTransactions(-1000)
-console.log(customer1.getBalance())
+console.log(`\n-- Current balance: ${customer1.getBalance()}`)
 console.log(arizonaBank.listCustomers(westBranch, true))
 console.log(arizonaBank.listCustomers(sunBranch,true))
